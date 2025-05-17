@@ -1,18 +1,18 @@
 import React from 'react'
-import './styles.css'
+import './global.css'
+import { Toaster } from 'sonner'
 
 export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+  description: 'A crypto investment platform',
+  title: 'Crypto Investment Platform',
 }
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const { children } = props
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
         <main>{children}</main>
+        <Toaster />
       </body>
     </html>
   )
