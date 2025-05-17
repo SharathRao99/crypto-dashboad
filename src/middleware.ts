@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // Add paths that should be accessible without authentication
-const publicPaths = ['/login', '/api/auth/login']
+const publicPaths = ['/login'] // No need to list /api/auth/login here if /api is excluded by matcher
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('payload-token')
@@ -29,11 +29,11 @@ export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
-     * - api/auth/login (login API route)
+     * - api/ (all API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    '/((?!api/auth/login|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api/|_next/static|_next/image|favicon.ico).*)|',
   ],
 }

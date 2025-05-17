@@ -36,29 +36,32 @@ export default function Login() {
     },
   })
 
-  async function onSubmit(data: FormData) {
+  const onSubmit = async (data: FormData) => {
     try {
       setIsLoading(true)
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_PAYLOAD_URL}/api/users/login`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+        }),
       })
-
-      if (!response.ok) {
-        throw new Error('Login failed')
-      }
 
       const result = await response.json()
 
-      if (result.user) {
-        toast.success('Login successful')
-        router.push('/dashboard') // Redirect to dashboard after successful login
+      if (!response.ok) {
+        throw new Error(result.errors?.[0]?.message || 'Login failed')
       }
+
+      toast.success('Successfully logged in!')
+      router.push('/')
     } catch (error) {
-      toast.error('Invalid email or password')
+      toast.error(error instanceof Error ? error.message : 'An error occurred during login')
+      console.error('error', error)
     } finally {
       setIsLoading(false)
     }
@@ -81,7 +84,12 @@ export default function Login() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
+                    <Input
+                      placeholder="Enter your email"
+                      type="email"
+                      autoComplete="email"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -95,7 +103,12 @@ export default function Login() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="Enter your password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Enter your password"
+                      autoComplete="current-password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
