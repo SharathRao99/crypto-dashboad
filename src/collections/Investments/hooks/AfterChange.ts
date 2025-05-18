@@ -9,13 +9,25 @@ export const updateActiveInvestments: CollectionAfterChangeHook<Investment> = as
   // Only update active investments on create or update
   if (operation === 'create' || operation === 'update') {
     const payload = req.payload
-    const userId = typeof doc.user === 'object' && doc.user !== null ? doc.user.id : doc.user
+
+    // Ensure we get the string ID for user and crypto
+    const userId =
+      typeof doc.user === 'object' && doc.user !== null ? doc.user.id : (doc.user as string)
     const cryptoId =
-      typeof doc.crypto === 'object' && doc.crypto !== null ? doc.crypto.id : doc.crypto
+      typeof doc.crypto === 'object' && doc.crypto !== null ? doc.crypto.id : (doc.crypto as string)
 
     if (!userId || !cryptoId) {
       console.error('User or Crypto ID not found in investment document', doc)
       return doc // Should not happen with required fields, but good to be safe
+    }
+    // Check if userId and cryptoId are strings, if not, log an error
+    if (typeof userId !== 'string' || typeof cryptoId !== 'string') {
+      console.error(
+        `Extracted IDs are not strings. userId type: ${typeof userId}, cryptoId type: ${typeof cryptoId}`,
+        doc,
+      )
+      // Depending on the expected ID type, you might need to throw or return here
+      return doc
     }
 
     // Recalculate total invested crypto amount for this user and crypto
@@ -58,7 +70,6 @@ export const updateActiveInvestments: CollectionAfterChangeHook<Investment> = as
         user: { equals: userId },
         crypto: { equals: cryptoId },
       },
-      limit: 1, // Should only be one active investment per user/crypto
       overrideAccess: true,
     })
 
@@ -69,12 +80,20 @@ export const updateActiveInvestments: CollectionAfterChangeHook<Investment> = as
         overrideAccess: true,
       })
 
-      if (!cryptoDoc || typeof cryptoDoc.value !== 'string') {
+      if (!cryptoDoc || !cryptoDoc.value) {
         console.error('Crypto document or value not found for ID:', cryptoId)
         return doc // Cannot calculate INR value without crypto value
       }
 
-      const currentCryptoValue = parseFloat(cryptoDoc.value)
+      // Parse the value string to float, handling any formatting
+      const valueString = cryptoDoc.value.toString().replace(/,/g, '')
+      const currentCryptoValue = parseFloat(valueString)
+
+      if (isNaN(currentCryptoValue)) {
+        console.error('Invalid crypto value format for ID:', cryptoId, 'Value:', cryptoDoc.value)
+        return doc
+      }
+
       const activeAmountInr = activeCryptoAmount * currentCryptoValue
 
       if (existingActiveInvestment.docs.length > 0) {
@@ -101,15 +120,19 @@ export const updateActiveInvestments: CollectionAfterChangeHook<Investment> = as
         }
       } else if (activeCryptoAmount > 0) {
         // Create new record
+        console.log('Attempting to create new active-investment entry.')
+        console.log('userId:', userId, 'typeof userId:', typeof userId)
+        const createData = {
+          user: userId,
+          crypto: cryptoId,
+          activeCryptoAmount,
+          activeAmountInr,
+          lastUpdated: new Date().toISOString(),
+        }
+        console.log('Data being sent for create:', createData)
         await payload.create({
           collection: 'active-investments',
-          data: {
-            user: userId,
-            crypto: cryptoId,
-            activeCryptoAmount,
-            activeAmountInr,
-            lastUpdated: new Date().toISOString(),
-          },
+          data: createData,
           overrideAccess: true,
         })
       }
@@ -172,7 +195,6 @@ export const updateActiveInvestments: CollectionAfterChangeHook<Investment> = as
         user: { equals: userId },
         crypto: { equals: cryptoId },
       },
-      limit: 1, // Should only be one active investment per user/crypto
       overrideAccess: true,
     })
 
@@ -186,15 +208,25 @@ export const updateActiveInvestments: CollectionAfterChangeHook<Investment> = as
             overrideAccess: true,
           })
 
-          if (!cryptoDoc || typeof cryptoDoc.value !== 'string') {
-            console.error(
-              'Crypto document or value not found for ID during deletion update:',
-              cryptoId,
-            )
-            return doc // Cannot calculate INR value without crypto value
+          if (!cryptoDoc || !cryptoDoc.value) {
+            console.error('Crypto document or value not found for ID:', cryptoId)
+            return doc
           }
 
-          const currentCryptoValue = parseFloat(cryptoDoc.value)
+          // Parse the value string to float, handling any formatting
+          const valueString = cryptoDoc.value.toString().replace(/,/g, '')
+          const currentCryptoValue = parseFloat(valueString)
+
+          if (isNaN(currentCryptoValue)) {
+            console.error(
+              'Invalid crypto value format for ID:',
+              cryptoId,
+              'Value:',
+              cryptoDoc.value,
+            )
+            return doc
+          }
+
           const activeAmountInr = activeCryptoAmount * currentCryptoValue
 
           await payload.update({

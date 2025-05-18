@@ -44,17 +44,32 @@ const Withdrawals: CollectionConfig = {
         {
           name: 'status',
           type: 'select',
+          defaultValue: 'pending',
+          required: true,
           options: [
             { label: 'Pending', value: 'pending' },
+            { label: 'In Progress', value: 'inProgress' },
+            { label: 'Rejected', value: 'rejected' },
             { label: 'Complete', value: 'complete' },
-            { label: 'Failed', value: 'failed' },
           ],
-          required: true,
-          defaultValue: 'pending',
         },
         {
-          name: 'notes',
-          type: 'textarea',
+          name: 'transactionId',
+          type: 'text',
+          admin: {
+            condition: (data, siblingData) => siblingData?.status === 'complete',
+          },
+        },
+        {
+          name: 'timestamp',
+          type: 'date',
+          defaultValue: new Date(),
+          required: true,
+          admin: {
+            date: {
+              pickerAppearance: 'dayAndTime',
+            },
+          },
         },
       ],
     },

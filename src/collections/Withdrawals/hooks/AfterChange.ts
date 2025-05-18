@@ -69,7 +69,6 @@ export const updateActiveInvestments: CollectionAfterChangeHook<Withdrawal> = as
           user: { equals: userId },
           crypto: { equals: cryptoId },
         },
-        limit: 1, // Should only be one active investment per user/crypto
         overrideAccess: true,
       })
 
@@ -180,7 +179,6 @@ export const updateActiveInvestments: CollectionAfterChangeHook<Withdrawal> = as
           user: { equals: userId },
           crypto: { equals: cryptoId },
         },
-        limit: 1, // Should only be one active investment per user/crypto
         overrideAccess: true,
       })
 
