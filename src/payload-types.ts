@@ -202,6 +202,7 @@ export interface Withdrawal {
   user: string | User;
   crypto: string | Crypto;
   amount: number;
+  inrValue: number;
   withdrawalDetails: {
     status: 'pending' | 'inProgress' | 'rejected' | 'complete';
     transactionId?: string | null;
@@ -372,6 +373,7 @@ export interface WithdrawalsSelect<T extends boolean = true> {
   user?: T;
   crypto?: T;
   amount?: T;
+  inrValue?: T;
   withdrawalDetails?:
     | T
     | {

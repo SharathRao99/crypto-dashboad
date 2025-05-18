@@ -38,6 +38,11 @@ const Withdrawals: CollectionConfig = {
       required: true,
     },
     {
+      name: 'inrValue',
+      type: 'number',
+      required: true,
+    },
+    {
       name: 'withdrawalDetails',
       type: 'group',
       fields: [
@@ -56,6 +61,8 @@ const Withdrawals: CollectionConfig = {
         {
           name: 'transactionId',
           type: 'text',
+          required: true,
+          unique: true,
           admin: {
             condition: (data, siblingData) => siblingData?.status === 'complete',
           },
