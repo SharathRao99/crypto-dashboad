@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Image from 'next/image'
 import { InvestmentCard } from '@/components/InvestmentCard'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 export default async function ProfilePage() {
   const headers = await nextHeaders()
@@ -26,8 +28,11 @@ export default async function ProfilePage() {
     <div className="container mx-auto py-6 space-y-6 px-4 sm:px-6">
       {/* Profile Header */}
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Profile Information</CardTitle>
+          <Button asChild>
+            <Link href="/dashboard/profile/edit">Edit Profile</Link>
+          </Button>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row items-center gap-6 mb-8">
