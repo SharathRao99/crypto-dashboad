@@ -172,3 +172,84 @@ export async function getTransactions(
     ),
   }
 }
+
+interface UserProfile {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  phone?: string
+  walletAddress?: string
+  address?: string
+  profileImage?: {
+    url: string
+  }
+  role: 'admin' | 'user'
+  totalInvestment: number
+  investments: {
+    cryptoName: string
+    cryptoSymbol: string
+    cryptoImage: string
+    amount: number
+    inrValue: number
+  }[]
+}
+
+export async function getUserProfile(userId: string): Promise<UserProfile> {
+  const payload = await getPayload({ config: configPromise })
+
+  // Get user data
+  const user = await payload.findByID({
+    collection: 'users',
+    id: userId,
+  })
+
+  // Get user's investments
+  const investments = await payload.find({
+    collection: 'investments',
+    where: {
+      user: {
+        equals: userId,
+      },
+    },
+    depth: 2,
+  })
+
+  // Calculate total investment
+  const totalInvestment = investments.docs.reduce(
+    (sum: number, investment: any) => sum + investment.inrValue,
+    0,
+  )
+
+  // Get active investments by crypto
+  const activeInvestments = investments.docs.reduce((acc: any, investment: any) => {
+    const cryptoId = investment.crypto.id
+    if (!acc[cryptoId]) {
+      acc[cryptoId] = {
+        cryptoName: investment.crypto.name,
+        cryptoSymbol: investment.crypto.symbol,
+        cryptoImage: investment.crypto.image.url,
+        amount: investment.cryptoAmount,
+        inrValue: investment.inrValue,
+      }
+    } else {
+      acc[cryptoId].amount += investment.cryptoAmount
+      acc[cryptoId].inrValue += investment.inrValue
+    }
+    return acc
+  }, {})
+
+  return {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    phone: user.phone || undefined,
+    walletAddress: user.walletAddress || undefined,
+    address: user.address || undefined,
+    profileImage: user.profileImage ? { url: user?.profileImage?.url } : undefined,
+    role: user.role,
+    totalInvestment,
+    investments: Object.values(activeInvestments),
+  }
+}
