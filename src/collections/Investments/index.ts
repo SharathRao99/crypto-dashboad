@@ -1,4 +1,5 @@
 import { CollectionConfig } from 'payload'
+import { updateActiveInvestments } from './hooks/AfterChange' // Import the new hook
 
 const Investments: CollectionConfig = {
   slug: 'investments',
@@ -62,6 +63,9 @@ const Investments: CollectionConfig = {
       required: false,
     },
   ],
+  hooks: {
+    afterChange: [updateActiveInvestments], // Use the imported hook
+  },
 }
 
 export default Investments

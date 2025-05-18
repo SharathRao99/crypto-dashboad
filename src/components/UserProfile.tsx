@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Image from 'next/image'
-import { email } from 'node_modules/payload/dist/fields/validations'
 
 interface UserProfileProps {
   firstName: string

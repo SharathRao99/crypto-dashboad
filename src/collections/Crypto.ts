@@ -24,6 +24,12 @@ const Cryptos: CollectionConfig = {
       unique: true,
     },
     {
+      name: 'value',
+      type: 'text',
+      required: true,
+      label: 'Current value in INR',
+    },
+    {
       name: 'image',
       type: 'upload',
       relationTo: 'media', // Default Payload media collection

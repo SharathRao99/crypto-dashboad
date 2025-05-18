@@ -113,7 +113,7 @@ export default async function ProfilePage() {
         </CardHeader>
         <CardContent>
           <div className="mb-6">
-            <h3 className="text-sm font-medium text-muted-foreground">Total Investment</h3>
+            <h3 className="text-sm font-medium text-muted-foreground">Total Networth</h3>
             <p className="text-2xl font-bold">₹{profile.totalInvestment.toLocaleString()}</p>
           </div>
 
@@ -135,11 +135,11 @@ export default async function ProfilePage() {
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {profile.investments.map((investment) => (
                     <InvestmentCard
-                      key={`${investment.cryptoName}-${investment.cryptoSymbol}`}
-                      cryptoName={investment.cryptoName}
-                      cryptoSymbol={investment.cryptoSymbol}
-                      cryptoImage={investment.cryptoImage}
-                      investedAmount={investment.inrValue}
+                      key={`${investment.cryptoName || ''}-${investment.cryptoSymbol || ''}`}
+                      cryptoName={investment.cryptoName || ''}
+                      cryptoSymbol={investment.cryptoSymbol || ''}
+                      cryptoImage={investment.cryptoImage || ''}
+                      activeAmountInr={investment.activeAmountInr}
                       cryptoAmount={investment.amount}
                     />
                   ))}

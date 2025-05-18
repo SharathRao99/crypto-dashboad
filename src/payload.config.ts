@@ -12,6 +12,7 @@ import { Media } from './collections/Media'
 import Cryptos from './collections/Crypto'
 import Investments from './collections/Investments'
 import Withdrawals from './collections/Withdrawals'
+import ActiveInvestments from './collections/ActiveInvestments'
 import { fields, formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 
 const filename = fileURLToPath(import.meta.url)
@@ -24,7 +25,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Cryptos, Investments, Withdrawals],
+  collections: [Users, Media, Cryptos, Investments, Withdrawals, ActiveInvestments],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -36,14 +37,6 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
-    formBuilderPlugin({
-      fields: {
-        payment: false,
-      },
-      formOverrides: {
-        fields: undefined,
-      },
-    }),
     // storage-adapter-placeholder
   ],
 })

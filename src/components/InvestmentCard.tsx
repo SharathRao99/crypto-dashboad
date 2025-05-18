@@ -5,7 +5,7 @@ interface InvestmentCardProps {
   cryptoName: string
   cryptoSymbol: string
   cryptoImage: string
-  investedAmount: number
+  activeAmountInr: number
   cryptoAmount: number
 }
 
@@ -13,7 +13,7 @@ export function InvestmentCard({
   cryptoName,
   cryptoSymbol,
   cryptoImage,
-  investedAmount,
+  activeAmountInr,
   cryptoAmount,
 }: InvestmentCardProps) {
   return (
@@ -30,12 +30,12 @@ export function InvestmentCard({
       <CardContent>
         <div className="space-y-2">
           <div className="flex justify-between">
-            <span className="text-sm text-muted-foreground">Invested Amount</span>
-            <span className="font-medium">₹{investedAmount.toLocaleString()}</span>
+            <span className="text-sm text-muted-foreground">Crypto</span>
+            <span className="font-medium">{cryptoAmount.toFixed(8)}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-sm text-muted-foreground">Crypto Amount</span>
-            <span className="font-medium">{cryptoAmount.toFixed(8)}</span>
+            <span className="text-sm text-muted-foreground">Current Value</span>
+            <span className="font-medium">₹{activeAmountInr.toLocaleString() || 0}</span>
           </div>
         </div>
       </CardContent>
