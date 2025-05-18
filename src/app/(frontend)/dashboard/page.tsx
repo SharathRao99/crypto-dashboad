@@ -1,20 +1,17 @@
 import { headers as nextHeaders } from 'next/headers'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
-import { getInvestments, getUserData } from '@/utils/getPayload'
+import { getInvestments, getUserData, verifyAuth } from '@/utils/getPayload'
 import { UserProfile } from '@/components/UserProfile'
 import { InvestmentCard } from '@/components/InvestmentCard'
 
 export default async function DashboardPage() {
-  const payload = await getPayload({ config: configPromise })
   const headers = await nextHeaders()
 
   if (!headers) {
     redirect('/login')
   }
 
-  const result = await payload.auth({ headers })
+  const result = await verifyAuth(headers)
 
   const user = result.user
 
