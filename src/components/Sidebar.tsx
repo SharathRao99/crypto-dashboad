@@ -17,23 +17,52 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile Hamburger */}
-      <div className="md:hidden fixed top-4 h-h-dvh left-4 z-50">
+      {/* Mobile Top Bar */}
+      <div className="lg:hidden sticky top-0 z-50 flex items-center justify-between h-16 px-4 bg-white dark:bg-gray-900 shadow-sm border-b border-gray-100 dark:border-gray-800">
+        <Link href="/dashboard" className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+          CryptoDash
+        </Link>
         <button
-          onClick={() => setOpen(true)}
-          className="p-2 rounded-md bg-white dark:bg-gray-900 shadow-md text-gray-700 dark:text-gray-200"
+          onClick={() => setOpen(!open)}
+          className="p-2 rounded-md bg-white dark:bg-gray-900 shadow text-gray-700 dark:text-gray-200"
         >
-          <Menu className="h-6 w-6" />
+          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
 
-      {/* Sidebar */}
+      {/* Mobile Slide-in Menu */}
+      <div
+        className={`lg:hidden fixed inset-0 z-40 transition-all duration-200 ${open ? 'pointer-events-auto' : 'pointer-events-none'}`}
+        aria-hidden={!open}
+      >
+        {/* Overlay */}
+        <div
+          className={`absolute inset-0 bg-black/30 transition-opacity duration-200 ${open ? 'opacity-100' : 'opacity-0'}`}
+          onClick={() => setOpen(false)}
+        />
+        {/* Slide-in Menu */}
+        <nav
+          className={`absolute top-0 right-0 h-full w-full bg-white dark:bg-gray-900 shadow-lg flex flex-col gap-2 px-4 pt-20 transition-transform duration-200 ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        >
+          {menuItems.map(({ name, href, icon: Icon }) => (
+            <Link
+              key={name}
+              href={href}
+              className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              onClick={() => setOpen(false)}
+            >
+              <Icon className="h-5 w-5" />
+              <span>{name}</span>
+            </Link>
+          ))}
+        </nav>
+      </div>
+
+      {/* Desktop Sidebar */}
       <aside
         className={`
-          fixed z-40 top-0 left-0 h-dvh w-64 bg-white dark:bg-gray-900 shadow-lg
-          flex flex-col justify-between transition-transform duration-200
-          ${open ? 'translate-x-0' : '-translate-x-full'}
-          md:translate-x-0 md:static md:shadow-none
+          hidden lg:fixed lg:z-40 lg:top-0 lg:left-0 lg:h-dvh lg:w-64 lg:bg-white lg:dark:bg-gray-900 lg:shadow-lg
+          lg:flex lg:flex-col lg:justify-between
         `}
       >
         <div>
@@ -61,20 +90,7 @@ export default function Sidebar() {
             ))}
           </nav>
         </div>
-        {/* Mobile Close Button */}
-        {open && (
-          <button
-            className="absolute top-4 right-4 md:hidden p-2 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200"
-            onClick={() => setOpen(false)}
-          >
-            <X className="h-6 w-6" />
-          </button>
-        )}
       </aside>
-      {/* Overlay for mobile */}
-      {open && (
-        <div className="fixed inset-0 z-30 bg-black/30 md:hidden" onClick={() => setOpen(false)} />
-      )}
     </>
   )
 }
