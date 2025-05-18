@@ -1,6 +1,4 @@
 export const validateWithdrawAmount = async ({ data, req }: { data: any; req: any }) => {
-  console.log('data', data)
-  console.log('req', req)
   const userId = data.user
   const cryptoId = data.crypto
   const withdrawAmount = data.amount

@@ -1,6 +1,6 @@
 import { CollectionConfig } from 'payload'
-import { anyone } from '../access/anyone'
 import { isAdmin } from '../access/isAdmin'
+import { anyone } from '@/access/anyone'
 
 const ActiveInvestments: CollectionConfig = {
   slug: 'active-investments',
@@ -20,7 +20,6 @@ const ActiveInvestments: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
       required: true,
-      unique: true, // User can only have one active investment record per crypto
       index: true,
     },
     {
@@ -28,7 +27,6 @@ const ActiveInvestments: CollectionConfig = {
       type: 'relationship',
       relationTo: 'cryptos',
       required: true,
-      unique: true, // User can only have one active investment record per crypto (combined with user)
       index: true,
     },
     {
@@ -45,6 +43,12 @@ const ActiveInvestments: CollectionConfig = {
       name: 'lastUpdated',
       type: 'date',
       required: true,
+    },
+  ],
+  indexes: [
+    {
+      fields: ['user', 'crypto'],
+      unique: true,
     },
   ],
 }

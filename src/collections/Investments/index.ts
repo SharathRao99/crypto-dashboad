@@ -56,6 +56,7 @@ const Investments: CollectionConfig = {
       name: 'transactionId',
       type: 'text',
       required: true,
+      unique: true,
     },
     {
       name: 'notes',
