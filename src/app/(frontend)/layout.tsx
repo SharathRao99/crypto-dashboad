@@ -1,6 +1,7 @@
 import React from 'react'
 import './global.css'
 import { Toaster } from 'sonner'
+import { Providers } from './provider'
 
 export const metadata = {
   description: 'A crypto investment platform',
@@ -11,8 +12,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <main>{children}</main>
-        <Toaster />
+        <Providers>
+          <main>{children}</main>
+          <Toaster />
+        </Providers>
       </body>
     </html>
   )
