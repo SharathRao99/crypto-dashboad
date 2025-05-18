@@ -61,7 +61,7 @@ export default function Header() {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-16 bg-white dark:bg-gray-900 border-t border-black/10 dark:border-white/10 shadow-sm">
+        <div className="md:hidden fixed inset-0 z-40 top-16 bg-white dark:bg-gray-900 border-t border-black/10 dark:border-white/10 shadow-sm">
           <div className="h-[calc(100vh-4rem)] overflow-y-auto">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {menuItems.map((item) => (
