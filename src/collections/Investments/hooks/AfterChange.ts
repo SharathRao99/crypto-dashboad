@@ -1,5 +1,5 @@
 import { CollectionAfterChangeHook } from 'payload'
-import { Crypto, Investment, Withdrawal } from '@/payload-types'
+import { Investment, Withdrawal } from '@/payload-types'
 
 export const updateActiveInvestments: CollectionAfterChangeHook<Investment> = async ({
   doc,

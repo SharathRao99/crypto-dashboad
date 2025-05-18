@@ -19,7 +19,6 @@ export const updateActiveInvestments: CollectionAfterChangeHook<Withdrawal> = as
         : null
 
     const isStatusComplete = doc.withdrawalDetails?.status === 'complete'
-    const wasStatusComplete = oldDoc?.withdrawalDetails?.status === 'complete'
 
     // Only proceed if status becomes complete or is already complete and updated
     if (isStatusComplete) {

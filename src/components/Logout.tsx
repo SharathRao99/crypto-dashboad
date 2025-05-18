@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { toast } from 'sonner'
 import Loading from './Loading'
 
-export default async function Logout() {
+export default function Logout() {
   const router = useRouter()
 
   const handleLogout = async () => {
@@ -18,7 +18,9 @@ export default async function Logout() {
 
     toast.success('Successfully logged out')
 
-    router.push('/login')
+    if (res.ok) {
+      router.push('/login')
+    }
   }
 
   useEffect(() => {

@@ -13,7 +13,6 @@ import Cryptos from './collections/Crypto'
 import Investments from './collections/Investments'
 import Withdrawals from './collections/Withdrawals'
 import ActiveInvestments from './collections/ActiveInvestments'
-import { fields, formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
