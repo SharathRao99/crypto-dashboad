@@ -8,6 +8,7 @@ interface UserProfileProps {
   email: string
   profileImage?: string
   totalInvestment: number
+  totalWithdrawals: number
 }
 
 export function UserProfile({
@@ -16,6 +17,7 @@ export function UserProfile({
   profileImage,
   email,
   totalInvestment,
+  totalWithdrawals,
 }: UserProfileProps) {
   return (
     <Card className="w-full">
@@ -49,9 +51,15 @@ export function UserProfile({
                 <h5>{email}</h5>
               </div>
             </div>
-            <div className="w-full md:w-1/2 flex flex-col">
-              <h5 className="text-lg text-muted-foreground">Total Investment</h5>
-              <p className="text-2xl font-bold">₹{totalInvestment.toLocaleString()}</p>
+            <div className="w-full md:w-1/2 flex justify-between">
+              <div className="w-1/2 flex flex-col">
+                <h5 className="text-lg text-muted-foreground">Total Investment</h5>
+                <p className="text-2xl font-bold">₹{totalInvestment.toLocaleString()}</p>
+              </div>
+              <div className="w-1/2 flex flex-col">
+                <h5 className="text-lg text-muted-foreground">Total Withdrawals</h5>
+                <p className="text-2xl font-bold">₹{totalWithdrawals.toLocaleString()}</p>
+              </div>
             </div>
           </div>
         </div>

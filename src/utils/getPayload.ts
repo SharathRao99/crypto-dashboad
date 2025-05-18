@@ -25,17 +25,43 @@ export async function getUserData(userId: string) {
     },
   })
 
+  // Calculate total withdrawals
+  const withdrawals = await payload.find({
+    collection: 'withdrawals',
+    where: {
+      and: [
+        {
+          user: {
+            equals: userId,
+          },
+        },
+        {
+          'withdrawalDetails.status': {
+            equals: 'complete',
+          },
+        },
+      ],
+    },
+  })
+
   const totalInvestment = investments.docs.reduce(
     (sum: number, investment: any) => sum + investment.inrValue,
     0,
   )
 
+  console.log('withdrawals, userId', withdrawals)
+  const totalWithdrawals = withdrawals.docs.reduce(
+    (sum: number, withdrawal: any) => sum + withdrawal.inrValue,
+    0,
+  )
+
   return {
+    email: user.email,
     firstName: user.firstName,
     lastName: user.lastName,
     profileImage: user.profileImage,
     totalInvestment,
-    email: user.email,
+    totalWithdrawals,
   }
 }
 
