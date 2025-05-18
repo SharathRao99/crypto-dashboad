@@ -17,7 +17,39 @@ export async function PATCH(request: Request) {
     const payload = await getPayload({ config: configPromise })
     const data = await request.json()
 
-    // Update user profile
+    // If password update is requested
+    if (data.currentPassword && data.newPassword) {
+      // Verify current password
+      const loginResult = await payload.login({
+        collection: 'users',
+        data: {
+          email: user.email,
+          password: data.currentPassword,
+        },
+      })
+
+      if (!loginResult.user) {
+        return NextResponse.json({ error: 'Current password is incorrect' }, { status: 400 })
+      }
+
+      // Update user with new password
+      const updatedUser = await payload.update({
+        collection: 'users',
+        id: user.id,
+        data: {
+          password: data.newPassword,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone,
+          walletAddress: data.walletAddress,
+          address: data.address,
+        },
+      })
+
+      return NextResponse.json(updatedUser)
+    }
+
+    // Regular profile update without password change
     const updatedUser = await payload.update({
       collection: 'users',
       id: user.id,
