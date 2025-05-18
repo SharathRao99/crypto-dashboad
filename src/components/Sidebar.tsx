@@ -61,7 +61,7 @@ export default function Sidebar() {
       {/* Desktop Sidebar */}
       <aside
         className={`
-          hidden lg:fixed lg:z-40 lg:top-0 lg:left-0 lg:h-dvh lg:w-64 lg:bg-white lg:dark:bg-gray-900 lg:shadow-lg
+          hidden lg:sticky lg:z-40 lg:top-0 lg:left-0 lg:h-dvh lg:w-80 lg:bg-white lg:dark:bg-gray-900 lg:shadow-lg
           lg:flex lg:flex-col lg:justify-between
         `}
       >
