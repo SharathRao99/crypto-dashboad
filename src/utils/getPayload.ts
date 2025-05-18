@@ -28,6 +28,7 @@ export async function getUserData(userId: string) {
     lastName: user.lastName,
     profileImage: user.profileImage,
     totalInvestment,
+    email: user.email,
   }
 }
 
